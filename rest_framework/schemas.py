@@ -2,12 +2,11 @@ from importlib import import_module
 
 from django.conf import settings
 from django.contrib.admindocs.views import simplify_regex
-from django.urls import RegexURLPattern, RegexURLResolver
 from django.utils import six
 from django.utils.encoding import force_text
 
 from rest_framework import exceptions, serializers
-from rest_framework.compat import coreapi, uritemplate, urlparse
+from rest_framework.compat import coreapi, uritemplate, urlparse, get_regex_pattern, RegexURLPattern, RegexURLResolver
 from rest_framework.request import clone_request
 from rest_framework.views import APIView
 
@@ -115,7 +114,7 @@ class SchemaGenerator(object):
         api_endpoints = []
 
         for pattern in patterns:
-            path_regex = prefix + pattern.regex.pattern
+            path_regex = prefix + get_regex_pattern(pattern)
             if isinstance(pattern, RegexURLPattern):
                 path = self.get_path(path_regex)
                 callback = pattern.callback

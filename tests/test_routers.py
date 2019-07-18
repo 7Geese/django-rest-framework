@@ -8,6 +8,7 @@ from django.db import models
 from django.test import TestCase, override_settings
 
 from rest_framework import permissions, serializers, viewsets
+from rest_framework.compat import get_regex_pattern
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
 from rest_framework.routers import DefaultRouter, SimpleRouter
@@ -144,7 +145,7 @@ class TestCustomLookupFields(TestCase):
 
     def test_custom_lookup_field_route(self):
         detail_route = notes_router.urls[-1]
-        detail_url_pattern = detail_route.regex.pattern
+        detail_url_pattern = get_regex_pattern(detail_route)
         self.assertIn('<uuid>', detail_url_pattern)
 
     def test_retrieve_lookup_field_list_view(self):
@@ -186,7 +187,7 @@ class TestLookupValueRegex(TestCase):
     def test_urls_limited_by_lookup_value_regex(self):
         expected = ['^notes/$', '^notes/(?P<uuid>[0-9a-f]{32})/$']
         for idx in range(len(expected)):
-            self.assertEqual(expected[idx], self.urls[idx].regex.pattern)
+            self.assertEqual(expected[idx], get_regex_pattern(self.urls[idx]))
 
 
 @override_settings(ROOT_URLCONF='tests.test_routers')
@@ -201,7 +202,7 @@ class TestLookupUrlKwargs(TestCase):
 
     def test_custom_lookup_url_kwarg_route(self):
         detail_route = kwarged_notes_router.urls[-1]
-        detail_url_pattern = detail_route.regex.pattern
+        detail_url_pattern = get_regex_pattern(detail_route)
         self.assertIn('^notes/(?P<text>', detail_url_pattern)
 
     def test_retrieve_lookup_url_kwarg_detail_view(self):
@@ -227,7 +228,7 @@ class TestTrailingSlashIncluded(TestCase):
     def test_urls_have_trailing_slash_by_default(self):
         expected = ['^notes/$', '^notes/(?P<pk>[^/.]+)/$']
         for idx in range(len(expected)):
-            self.assertEqual(expected[idx], self.urls[idx].regex.pattern)
+            self.assertEqual(expected[idx], get_regex_pattern(self.urls[idx]))
 
 
 class TestTrailingSlashRemoved(TestCase):
@@ -242,7 +243,7 @@ class TestTrailingSlashRemoved(TestCase):
     def test_urls_can_have_trailing_slash_removed(self):
         expected = ['^notes$', '^notes/(?P<pk>[^/.]+)$']
         for idx in range(len(expected)):
-            self.assertEqual(expected[idx], self.urls[idx].regex.pattern)
+            self.assertEqual(expected[idx], get_regex_pattern(self.urls[idx]))
 
 
 class TestNameableRoot(TestCase):

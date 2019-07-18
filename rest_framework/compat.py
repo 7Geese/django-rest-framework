@@ -18,9 +18,39 @@ from django.utils import six
 from django.views.generic import View
 
 try:
+    from django.urls import (
+        NoReverseMatch, URLPattern as RegexURLPattern, URLResolver as RegexURLResolver, ResolverMatch, Resolver404, get_script_prefix, reverse, reverse_lazy, resolve
+    )
+except ImportError:
+    from django.urls import (  # Will be removed in Django 2.0
+        NoReverseMatch, RegexURLPattern, RegexURLResolver, ResolverMatch, Resolver404, get_script_prefix, reverse, reverse_lazy, resolve
+    )
+
+try:
     import importlib  # Available in Python 3.1+
 except ImportError:
     from django.utils import importlib  # Will be removed in Django 1.9
+
+
+# Regex URL code from https://github.com/encode/django-rest-framework/pull/5500/files
+
+def get_regex_pattern(urlpattern):
+    if hasattr(urlpattern, 'pattern'):
+        # Django 2.0
+        return urlpattern.pattern.regex.pattern
+    else:
+        # Django < 2.0
+        return urlpattern.regex.pattern
+
+
+def make_url_resolver(regex, urlpatterns):
+    try:
+        # Django 2.0
+        from django.urls.resolvers import RegexPattern
+        return RegexURLResolver(RegexPattern(regex), urlpatterns)
+    except ImportError:
+        # Django < 2.0
+        return RegexURLResolver(regex, urlpatterns)
 
 
 try:
