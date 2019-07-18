@@ -2,7 +2,7 @@ from importlib import import_module
 
 from django.conf import settings
 from django.contrib.admindocs.views import simplify_regex
-from django.core.urlresolvers import RegexURLPattern, RegexURLResolver
+from django.urls import RegexURLPattern, RegexURLResolver
 from django.utils import six
 from django.utils.encoding import force_text
 

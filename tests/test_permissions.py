@@ -4,7 +4,7 @@ import base64
 import unittest
 
 from django.contrib.auth.models import Group, Permission, User
-from django.core.urlresolvers import ResolverMatch
+from django.urls import ResolverMatch
 from django.db import models
 from django.test import TestCase
 

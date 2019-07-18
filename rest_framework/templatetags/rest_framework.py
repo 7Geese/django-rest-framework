@@ -3,7 +3,7 @@ from __future__ import absolute_import, unicode_literals
 import re
 
 from django import template
-from django.core.urlresolvers import NoReverseMatch, reverse
+from django.urls import NoReverseMatch, reverse
 from django.template import loader
 from django.utils import six
 from django.utils.encoding import force_text, iri_to_uri

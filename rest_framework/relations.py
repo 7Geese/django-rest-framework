@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from collections import OrderedDict
 
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
-from django.core.urlresolvers import (
+from django.urls import (
     NoReverseMatch, Resolver404, get_script_prefix, resolve
 )
 from django.db.models import Manager
